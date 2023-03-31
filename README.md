@@ -11,3 +11,6 @@ JWLSLMerge.exe "path to file 1" "path to file 2" and so on.
 
 Example:
 JWLSLMerge.exe "c:\temp\discurso_182.jwlibrary" "c:\temp\discurso_157.jwlibrary"
+
+Download the JWLSLMerge.zip file from the latest release and run it, following the instructions.
+https://github.com/pliniobrunelli/JWLSLMerge/releases/latest
