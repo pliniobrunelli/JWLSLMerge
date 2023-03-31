@@ -1,5 +1,5 @@
 # JWLSLMerge
-JW Library Sign Language Merge Backup Files Utility
+JW Library Sign Language Merge Utility
 
 JWLSLMerge (or JW Library Sign Language Merge) is a utility to merge two or more JW Library Sign Language backup files. The first version of this utility was developed in less than 8 hours due to an urgent need to merge playlists for a theocratic event.
 
