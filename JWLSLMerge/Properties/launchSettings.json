@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "JWLSLMerge": {
+      "commandName": "Project",
+      "commandLineArgs": "\"C:\\Users\\Plinio\\Desktop\\jwlibrary\\discurso_182.jwlibrary\" \"C:\\Users\\Plinio\\Desktop\\jwlibrary\\discurso_especial.jwlibrary\""
+    }
+  }
+}
