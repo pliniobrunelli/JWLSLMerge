@@ -34,7 +34,7 @@ namespace JWLSLMerge
 
                     //unzip
                     string tempDir = Environment.GetTempDirectory();
-                    ZipFile.ExtractToDirectory(file, tempDir);
+                    ZipFile.ExtractToDirectory(file, tempDir, true);
 
                     string? dbFile = Directory.GetFiles(tempDir, "userData.db").FirstOrDefault();
 
@@ -102,6 +102,9 @@ namespace JWLSLMerge
 
             string jsonManifest = JsonConvert.SerializeObject(manifest, Newtonsoft.Json.Formatting.None);
 
+            string pathManifest = Path.Combine(targetPath, "manifest.json");
+            if (File.Exists(pathManifest)) File.Delete(pathManifest);
+
             using (var sw = new StreamWriter(Path.Combine(targetPath, "manifest.json"), false))
             {
                 sw.Write(jsonManifest);
@@ -128,6 +131,7 @@ namespace JWLSLMerge
              * PlayListItem (depends on IndependentMedia)
              * PlayListItemIndependentMediaMap (depends on IndependentMedia and PlayListItem)
              * PlayListItemLocationMap (depends on Location and PlayListItem)
+             * Tag
              * TagMap (depends on Tag, Location, PlaylistItem and Note)
              * PlaylistItemMarker (depends on PlayListItem)
              * PlaylistItemMarkerBibleVerseMap (depends on PlaylistItemMarker)
@@ -139,8 +143,26 @@ namespace JWLSLMerge
 
             foreach (var item in t_Location)
             {
-                //update with new id. necessary for new foreign keys
-                item.NewLocationId = dbMerged.ItemInsert<Location>(item);
+                try
+                {
+                    var location1 = dbMerged.GetFirst<Location>(item, new string[] { "KeySymbol", "IssueTagNumber", "MepsLanguage", "BookNumber", "DocumentId", "Track", "Type" });
+                    var location2 = dbMerged.GetFirst<Location>(item, new string[] { "BookNumber", "ChapterNumber", "KeySymbol", "MepsLanguage", "Type" }, false);
+                    var location3 = dbMerged.GetFirst<Location>(item, new string[] { "KeySymbol", "IssueTagNumber", "MepsLanguage", "DocumentId", "Track", "Type" });
+
+                    if (location1 == null && location2 == null && location3 == null)
+                    {
+                        //update with new id. necessary for new foreign keys
+                        item.NewLocationId = dbMerged.ItemInsert<Location>(item);
+                    }
+                    else
+                    {
+                        item.NewLocationId = (location1?.LocationId ?? location2?.LocationId ?? location3?.LocationId) ?? 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
 
             //merge InputField
@@ -281,8 +303,24 @@ namespace JWLSLMerge
 
             foreach (var item in t_Tag)
             {
-                //update with new id. necessary for new foreign keys
-                item.NewTagId = dbMerged.ItemInsert<Tag>(item);
+                try
+                {
+                    var tag1 = dbMerged.GetFirst<Tag>(item, new string[] { "Type", "Name" });
+
+                    if (tag1 == null)
+                    {
+                        //update with new id. necessary for new foreign keys
+                        item.NewTagId = dbMerged.ItemInsert<Tag>(item);
+                    }
+                    else
+                    {
+                        item.NewTagId = tag1.TagId;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
 
             //merge TagMap

@@ -22,6 +22,26 @@ namespace JWLSLMerge.Data
             }
         }
 
+        public T? GetFirst<T>(T item, string[] FieldNames, bool SetEmptyWhenNull = false)
+        {
+            using (IDbConnection con = new SQLiteConnection(connectionString))
+            {
+                string sql = $"SELECT * FROM {typeof(T).Name} WHERE {getWhereClause(FieldNames)}";
+
+                return con.Query<T>(sql, getParameters<T>(item, FieldNames, SetEmptyWhenNull)).FirstOrDefault();
+            }
+        }
+
+        public bool ItemExists<T>(T item, string[] FieldNames, bool SetEmptyWhenNull = false)
+        {
+            using (IDbConnection con = new SQLiteConnection(connectionString))
+            {
+                string sql = $"SELECT 1 FROM {typeof(T).Name} WHERE {getWhereClause(FieldNames)}";
+
+                return con.ExecuteScalar<int>(sql, getParameters<T>(item, FieldNames, SetEmptyWhenNull)) > 0;
+            }
+        }
+
         public int ItemInsert<T>(T item)
         {
             using (IDbConnection con = new SQLiteConnection(connectionString))
@@ -49,19 +69,29 @@ namespace JWLSLMerge.Data
             return dt;
         }
 
-        private DynamicParameters getParameters<T>(T objeto)
+        private DynamicParameters getParameters<T>(T objeto, string[]? FieldNames = null, bool SetEmptyWhenNull = false)
         {
-            var parametros = new DynamicParameters();
+            FieldNames = FieldNames?.Select(p => p.ToLower()).ToArray() ?? new string[0];
+            var parameters = new DynamicParameters();
 
-            foreach (var propriedade in typeof(T).GetProperties())
+            foreach (var propertyInfo in typeof(T).GetProperties())
             {
-                if (!propriedade.GetCustomAttributes(true).Any(a => a is IgnoreAttribute))
+                if (!propertyInfo.GetCustomAttributes(true).Any(a => a is IgnoreAttribute) &&
+                    (FieldNames.Length == 0 || FieldNames.Contains(propertyInfo.Name.ToLower())))
                 {
-                    parametros.Add(propriedade.Name, propriedade.GetValue(objeto));
+                    object? value = propertyInfo.GetValue(objeto);
+                    if (value == null && SetEmptyWhenNull) value = "";
+
+                    parameters.Add(propertyInfo.Name, value);
                 }
             }
 
-            return parametros;
+            return parameters;
+        }
+
+        private string getWhereClause(string[] FieldNames)
+        {
+            return string.Join(" AND ", FieldNames.Select(p => $"IFNULL({p}, '') = @{p}").ToArray());
         }
 
         private string getFieldNames<T>(bool includeAtSymbol = false)
