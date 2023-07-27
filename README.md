@@ -39,6 +39,7 @@ Example:
 ## Download
 You can download the JWLSLMerge utility from the latest release.
 
+https://github.com/pliniobrunelli/JWLSLMerge/releases/latest
 
 After downloading, extract the JWLSLMerge.zip file and run the executable, following the provided instructions.
 
