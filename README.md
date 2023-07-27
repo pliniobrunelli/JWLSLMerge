@@ -33,7 +33,7 @@ JWLSLMerge.exe "path to file 1" "path to file 2" and so on.
 
 Example: 
 
-	JWLSLMerge.exe "c:\temp\theme_003.jwlibrary" "c:\temp\theme_157.jwlibrary"
+	JWLSLMerge.exe -files "c:\temp\theme_003.jwlibrary" "c:\temp\theme_157.jwlibrary"
 ```
 
 ## Download
