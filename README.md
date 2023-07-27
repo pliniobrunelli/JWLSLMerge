@@ -21,21 +21,20 @@ JWLSLMerge.exe
 To merge all files that are in a specific directory:
 ```
 JWLSLMerge.exe -folder "directory path"
+
+Example: 
+
+	JWLSLMerge.exe -folder "c:\my backups"
 ```
-	Example: 
-	```
-		JWLSLMerge.exe -folder "c:\my backups"
-	```
 	
 To merge specific files:
 ```
 JWLSLMerge.exe "path to file 1" "path to file 2" and so on.
-```
 
-	Example: 
-	```
+Example: 
+
 	JWLSLMerge.exe "c:\temp\theme_003.jwlibrary" "c:\temp\theme_157.jwlibrary"
-	```
+```
 
 ## Download
 You can download the JWLSLMerge utility from the latest release.
