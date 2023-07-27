@@ -6,15 +6,36 @@ JWLSLMerge (or JW Library Sign Language Merge) is a utility to merge two or more
 There is still much room for improvement, so I welcome your contributions!
 
 ## Usage
-To use JWLSLMerge, simply enter the following command in the command prompt:
+To use JWLSLMerge, simply type one of the following commands at the command prompt:
 
+To display help on how to use this tool:
+```
+JWLSLMerge.exe -help
+```
+
+To merge all files that are in the same directory as the executable:
+```
+JWLSLMerge.exe
+```
+
+To merge all files that are in a specific directory:
+```
+JWLSLMerge.exe -folder "directory path"
+```
+	Example: 
+	```
+		JWLSLMerge.exe -folder "c:\my backups"
+	```
+	
+To merge specific files:
 ```
 JWLSLMerge.exe "path to file 1" "path to file 2" and so on.
 ```
 
-```
-JWLSLMerge.exe "c:\temp\discurso_182.jwlibrary" "c:\temp\discurso_157.jwlibrary"
-```
+	Example: 
+	```
+	JWLSLMerge.exe "c:\temp\theme_003.jwlibrary" "c:\temp\theme_157.jwlibrary"
+	```
 
 ## Download
 You can download the JWLSLMerge utility from the latest release.
