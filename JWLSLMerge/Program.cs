@@ -38,7 +38,7 @@ namespace JWLSLMerge
 
             MergeService mergeService = new MergeService();
             mergeService.Message += MergeService_Message;
-            mergeService.Run(args);
+            mergeService.Run(jwlibraryFiles);
         }
 
         private static string[] GetFiles(string[] args)
