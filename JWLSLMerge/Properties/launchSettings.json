@@ -1,7 +1,8 @@
 {
   "profiles": {
     "JWLSLMerge": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "-folder \"C:\\Users\\Plinio\\Downloads\\parte 1\""
     }
   }
 }

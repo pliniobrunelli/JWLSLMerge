@@ -172,7 +172,7 @@ namespace JWLSLMerge
                 {
                     i.LocationId = l.NewLocationId;
                     return i;
-                });
+                }).ToList();
 
             foreach (var item in t_InputField_new)
             {
@@ -186,7 +186,7 @@ namespace JWLSLMerge
                 {
                     b.LocationId = l.NewLocationId;
                     return b;
-                });
+                }).ToList();
 
             foreach (var item in t_Bookmark_new)
             {
@@ -200,7 +200,7 @@ namespace JWLSLMerge
                 {
                     b.LocationId = l.NewLocationId;
                     return b;
-                });
+                }).ToList();
 
             foreach (var item in t_UserMark_new)
             {
@@ -214,7 +214,7 @@ namespace JWLSLMerge
                 {
                     b.UserMarkId = u.NewUserMarkId;
                     return b;
-                });
+                }).ToList();
 
             foreach (var item in t_BlockRange_new)
             {
@@ -234,7 +234,7 @@ namespace JWLSLMerge
                 {
                     n.UserMarkId = u.NewUserMarkId;
                     return n;
-                });
+                }).ToList();
 
             foreach (var item in t_Note_new)
             {
@@ -246,7 +246,24 @@ namespace JWLSLMerge
 
             foreach (var item in t_IndependentMedia)
             {
-                item.NewIndependentMediaId = dbMerged.ItemInsert<IndependentMedia>(item);
+                try
+                {
+                    var independentMedia1 = dbMerged.GetFirst<IndependentMedia>(item, new string[] { "FilePath" });
+
+                    if (independentMedia1 == null)
+                    {
+                        //update with new id. necessary for new foreign keys
+                        item.NewIndependentMediaId = dbMerged.ItemInsert<IndependentMedia>(item);
+                    }
+                    else
+                    {
+                        item.NewIndependentMediaId = independentMedia1.IndependentMediaId;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
 
             //merge PlayListItem
@@ -271,7 +288,7 @@ namespace JWLSLMerge
                 {
                     m.PlaylistItemId = p.NewPlaylistItemId;
                     return m;
-                });
+                }).ToList();
 
             foreach (var item in t_PlayListItemIndependentMediaMap_new)
             {
@@ -291,7 +308,7 @@ namespace JWLSLMerge
                 {
                     m.PlaylistItemId = p.NewPlaylistItemId;
                     return m;
-                });
+                }).ToList();
 
             foreach (var item in t_PlaylistItemLocationMap_new)
             {
@@ -348,7 +365,7 @@ namespace JWLSLMerge
                 {
                     m.PlaylistItemId = p.NewPlaylistItemId;
                     return m;
-                });
+                }).ToList();
 
             foreach (var item in t_TagMap_new)
             {
@@ -362,7 +379,7 @@ namespace JWLSLMerge
                 {
                     m.PlaylistItemId = p.NewPlaylistItemId;
                     return m;
-                });
+                }).ToList();
 
             foreach (var item in t_PlaylistItemMarker_new)
             {
@@ -376,7 +393,7 @@ namespace JWLSLMerge
                 {
                     b.PlaylistItemMarkerId = m.NewPlaylistItemMarkerId;
                     return b;
-                });
+                }).ToList();
 
             foreach (var item in t_PlaylistItemMarkerBibleVerseMap_new)
             {
@@ -390,7 +407,7 @@ namespace JWLSLMerge
                 {
                     p.PlaylistItemMarkerId = m.NewPlaylistItemMarkerId;
                     return p;
-                });
+                }).ToList();
 
             foreach (var item in t_PlaylistItemMarkerParagraphMap_new)
             {
